@@ -1,0 +1,23 @@
+micronaut:
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+  application:
+    name: micronaut-jms-example
+
+io:
+  micronaut:
+    configuration:
+      jms:
+        activemq:
+          enabled: true
+          connection-string: 'tcp://localhost:61616'
+
+example:
+  jms:
+    destination: 'test'
