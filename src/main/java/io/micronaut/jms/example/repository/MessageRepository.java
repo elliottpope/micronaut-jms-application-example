@@ -15,14 +15,18 @@ public class MessageRepository {
 
     @ReadOnly
     public Message findById(String id) {
-        String queryString = "SELECT message from Message as m WHERE m.message_id = " + id;
-        return entityManager.createQuery(queryString, Message.class).getSingleResult();
+        String queryString = "SELECT m from Message as m WHERE m.messageID = '" + id + "'";
+        Message message = entityManager.createQuery(queryString, Message.class)
+                .getSingleResult();
+        System.err.println("Retrieved message from DB: " + message);
+        return message;
     }
 
     @Transactional
     public Message save(Message message) {
         System.err.println("Saving message with ID: " + message);
         entityManager.persist(message);
+        entityManager.flush();
         System.err.println("Message saved.");
         return findById(message.getMessageID());
     }
