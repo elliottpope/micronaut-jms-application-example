@@ -39,7 +39,7 @@ public class MessageProducer {
         producer.send(
                 destination,
                 message,
-                new MessageHeader(JMSHeaders.JMS_MESSAGE_ID, id.toString()));
+                new MessageHeader("X-Message-ID", id.toString()));
     }
 
     @PostConstruct

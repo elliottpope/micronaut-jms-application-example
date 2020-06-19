@@ -21,3 +21,20 @@ io:
 example:
   jms:
     destination: 'test'
+
+datasources:
+  default:
+    url: 'jdbc:postgresql://localhost:9000/messages'
+    username: 'postgres'
+    password: 'docker'
+    driverClassName: 'org.postgresql.Driver'
+
+jpa:
+  default:
+    packages-to-scan:
+      - 'io.micronaut.jms.example.repository.model'
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create-drop
+        show_sql: true

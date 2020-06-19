@@ -37,7 +37,7 @@ public class MessageController {
         return id.toString();
     }
 
-    @Post(value = "/bytes/{name}", produces = MediaType.TEXT_PLAIN)
+    @Post(value = "/bytes", produces = MediaType.TEXT_PLAIN)
     public String send() {
         UUID id = UUID.randomUUID();
         byte[] message = id.toString().getBytes();

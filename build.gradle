@@ -18,8 +18,14 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut.data:micronaut-data-processor:1.1.0.RC3"
+    implementation "io.micronaut.data:micronaut-data-hibernate-jpa:1.1.0.RC3"
 
+    implementation "io.micronaut.sql:micronaut-jdbc-hikari:2.3.3"
+    implementation "io.micronaut.sql:micronaut-hibernate-jpa:2.3.3"
+    runtimeOnly "org.postgresql:postgresql:42.2.14"
 
+    annotationProcessor "javax.persistence:javax.persistence-api:2.2"
     annotationProcessor "io.micronaut.configuration:micronaut-openapi:1.5.1"
     // needed because otherwise IntelliJ integration broken
     compileOnly "io.micronaut:micronaut-inject-java"
@@ -28,11 +34,6 @@ dependencies {
     implementation "io.micronaut:micronaut-runtime"
     implementation "javax.jms:javax.jms-api:2.0.1"
     implementation "io.micronaut:micronaut-http-server-netty"
-
-
-    implementation "io.micronaut.sql:micronaut-jdbc-hikari"
-    implementation "io.micronaut.sql:micronaut-hibernate-jpa"
-    runtimeOnly
 
     implementation 'io.micronaut.jms:micronaut-micronaut-jms-activemq:1.0.0.BUILD-SNAPSHOT'
     implementation 'io.micronaut.jms:micronaut-micronaut-jms-core:1.0.0.BUILD-SNAPSHOT'
