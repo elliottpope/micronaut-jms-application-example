@@ -1,0 +1,25 @@
+version: '3'
+services:
+  application:
+    build: .
+    ports:
+    - '8080:8080'
+    depends_on:
+      - 'postgres'
+      - 'activemq'
+    environment:
+      - 'DATASOURCES_DEFAULT_URL=jdbc:postgresql://postgres:5432/messages'
+      - 'IO_MICRONAUT_CONFIGURATION_JMS_ACTIVEMQ_CONNECTION_STRING=tcp://activemq:61616'
+    command:
+      ["./wait-for-it/wait-for-it.sh", "-s", "-t", "15", "postgres:5432", "--", "java", "-Dcom.sun.management.jmxremote", "-Xmx128m", "-jar", "test-application.jar"]
+  postgres:
+    image: 'postgres'
+    ports:
+    - '9000:5432'
+    environment:
+    - 'POSTGRES_PASSWORD=docker'
+    - 'POSTGRES_DB=messages'
+  activemq:
+    image: 'rmohr/activemq'
+    ports:
+    - '8161:8161'

@@ -7,6 +7,12 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
+      redoc:
+        paths: classpath:META-INF/swagger/views/redoc
+        mapping: /redoc/**
+      rapidoc:
+        paths: classpath:META-INF/swagger/views/rapidoc
+        mapping: /rapidoc/**
   application:
     name: micronaut-jms-example
 
@@ -36,5 +42,9 @@ jpa:
     properties:
       hibernate:
         hbm2ddl:
-          auto: create-drop
-        show_sql: true
+          auto: update
+
+flyway:
+  datasources:
+    default:
+      locations: 'classpath:db/migrations'
