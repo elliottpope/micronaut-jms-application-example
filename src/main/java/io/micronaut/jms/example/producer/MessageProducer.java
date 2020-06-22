@@ -14,6 +14,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Singleton
@@ -40,6 +42,21 @@ public class MessageProducer {
                 destination,
                 message,
                 new MessageHeader("X-Message-ID", id.toString()));
+    }
+
+    public <T> void sendWithHeaders(UUID id, T message, MessageHeader... headers) {
+        LOGGER.info("Sent message {} of type {} to queue {} with id {}",
+                message,
+                message.getClass(),
+                destination,
+                id);
+        List<MessageHeader> newHeaders =
+                Arrays.asList(headers);
+        newHeaders.add(new MessageHeader("X-Message-ID", id.toString()));
+        producer.send(
+                destination,
+                message,
+                (MessageHeader[]) newHeaders.toArray());
     }
 
     @PostConstruct
