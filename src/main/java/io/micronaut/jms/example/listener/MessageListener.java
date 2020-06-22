@@ -12,57 +12,72 @@ import io.micronaut.jms.model.MessageHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @JMSListener("activeMqConnectionFactory")
 public class MessageListener {
 
-    private static final Integer MESSAGES_PER_LEVEL = 10;
+    private static final Integer MESSAGES_PER_LEVEL = 3;
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageListener.class);
 
     @Inject
     private MessageRepository repository;
 
-    @Inject
-    private ExecutorService executorService;
+    private ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     @Inject
     private MessageProducer producer;
 
-    @Queue(destination = "${example.jms.destination}")
+    @Queue(
+            destination = "${example.jms.destination}",
+            concurrency = "5-10")
     public void receive(
             String message,
-            @Header("X-Message-ID") String messageID,
-            @Header("X-Parent-ID") String parentID,
-            @Header("X-Current-Depth") Integer currentDepth,
-            @Header("X-Max-Depth") Integer maxDepth) {
-        LOGGER.info(
-                "Received message with ID {} and content {}.",
+            @Header("X-Message-ID") @Nullable String messageID,
+            @Header("X-Parent-ID") @Nullable String parentID,
+            @Header("X-Current-Depth") @Nullable Integer currentDepth,
+            @Header("X-Max-Depth") @Nullable Integer maxDepth) {
+        LOGGER.debug(
+                "Received message with ID {} and content {}." +
+                        " Current Depth: {}. Parent ID: {}",
                 messageID,
-                message);
+                message,
+                currentDepth == null ? 0 : currentDepth,
+                parentID);
 
         Message messageToSave = new Message();
         messageToSave.setParentID(parentID);
         messageToSave.setMessageID(messageID);
         messageToSave.setReceived(new Date());
         messageToSave.setSent(new Date());
+        messageToSave.setThread(Thread.currentThread().getName());
         if (repository.save(messageToSave) == null) {
             System.err.println("Failed to save message " + message);
         }
 
-        if (currentDepth < maxDepth) {
+        if (currentDepth == null) {
+            currentDepth = 0;
+        }
+
+        if (maxDepth == null || currentDepth < maxDepth) {
             final int newDepth = currentDepth + 1;
             for (int i = 0; i < MESSAGES_PER_LEVEL; i++) {
                 executorService.submit(() -> {
+                    UUID id = UUID.randomUUID();
+                    LOGGER.debug("Sending message with ID: {} at depth: {}",
+                            id,
+                            newDepth);
                     producer.sendWithHeaders(
-                            UUID.randomUUID(),
+                            id,
                             message,
-                            new MessageHeader("X-Parent-ID", messageID),
-                            new MessageHeader("X-Current-Depth", Integer.toString(newDepth)),
-                            new MessageHeader("X-Max-Depth", maxDepth.toString()));
+                            messageID,
+                            newDepth,
+                            maxDepth == null ? MESSAGES_PER_LEVEL : maxDepth);
                 });
             }
         }

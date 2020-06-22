@@ -15,14 +15,10 @@ micronaut:
         mapping: /rapidoc/**
   application:
     name: micronaut-jms-example
-
-io:
-  micronaut:
-    configuration:
-      jms:
-        activemq:
-          enabled: true
-          connection-string: 'tcp://localhost:61616'
+  jms:
+    activemq:
+      enabled: true
+      connection-string: 'tcp://localhost:61616'
 
 example:
   jms:
