@@ -42,4 +42,7 @@ public class Message {
 
     @Column
     private String thread;
+
+    @Column
+    private Integer depth;
 }

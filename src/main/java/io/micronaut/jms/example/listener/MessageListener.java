@@ -50,18 +50,19 @@ public class MessageListener {
                 currentDepth == null ? 0 : currentDepth,
                 parentID);
 
+        if (currentDepth == null) {
+            currentDepth = 0;
+        }
+
         Message messageToSave = new Message();
         messageToSave.setParentID(parentID);
         messageToSave.setMessageID(messageID);
         messageToSave.setReceived(new Date());
         messageToSave.setSent(new Date());
         messageToSave.setThread(Thread.currentThread().getName());
+        messageToSave.setDepth(currentDepth);
         if (repository.save(messageToSave) == null) {
             System.err.println("Failed to save message " + message);
-        }
-
-        if (currentDepth == null) {
-            currentDepth = 0;
         }
 
         if (maxDepth == null || currentDepth < maxDepth) {
@@ -74,7 +75,7 @@ public class MessageListener {
                             newDepth);
                     producer.sendWithHeaders(
                             id,
-                            message,
+                            message + " - " + messageID,
                             messageID,
                             newDepth,
                             maxDepth == null ? MESSAGES_PER_LEVEL : maxDepth);
