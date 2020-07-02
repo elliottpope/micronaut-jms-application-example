@@ -1,14 +1,11 @@
 package io.micronaut.jms.example.listener;
 
-import io.micronaut.http.annotation.Head;
-import io.micronaut.jms.annotations.Header;
 import io.micronaut.jms.annotations.JMSListener;
 import io.micronaut.jms.annotations.Queue;
 import io.micronaut.jms.example.producer.MessageProducer;
 import io.micronaut.jms.example.repository.MessageRepository;
 import io.micronaut.jms.example.repository.model.Message;
-import io.micronaut.jms.model.JMSHeaders;
-import io.micronaut.jms.model.MessageHeader;
+import io.micronaut.messaging.annotation.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

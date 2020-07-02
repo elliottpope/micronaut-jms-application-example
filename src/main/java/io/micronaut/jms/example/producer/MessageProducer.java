@@ -1,9 +1,9 @@
 package io.micronaut.jms.example.producer;
 
-import io.micronaut.jms.annotations.Header;
 import io.micronaut.jms.annotations.JMSProducer;
 import io.micronaut.jms.annotations.Queue;
 import io.micronaut.jms.model.JMSHeaders;
+import io.micronaut.messaging.annotation.Header;
 
 import java.util.UUID;
 
