@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform('io.micronaut:micronaut-bom:2.0.0.M3')
+    implementation platform('io.micronaut:micronaut-bom:2.0.0')
 
     // lombok config must come before the Micronaut annotation processor config
     compileOnly 'org.projectlombok:lombok:1.18.12'
@@ -22,6 +22,7 @@ dependencies {
     annotationProcessor "io.micronaut.data:micronaut-data-processor:1.1.0.RC3"
     implementation "io.micronaut.data:micronaut-data-hibernate-jpa:1.1.0.RC3"
 
+    compile 'io.micronaut:micronaut-jdbc:2.2.6'
     implementation "io.micronaut.sql:micronaut-jdbc-hikari:2.3.3"
     implementation "io.micronaut.sql:micronaut-hibernate-jpa:2.3.3"
     runtimeOnly "org.postgresql:postgresql:42.2.14"
@@ -36,15 +37,15 @@ dependencies {
     implementation "javax.jms:javax.jms-api:2.0.1"
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "io.micronaut:micronaut-http-client"
-    implementation "io.micronaut.configuration:micronaut-flyway:2.0.0.RC1"
+    compile "io.micronaut.configuration:micronaut-flyway:2.0.0.RC1"
 
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
 
-    implementation 'io.micronaut.jms:micronaut-micronaut-jms-activemq:1.0.0.BUILD-SNAPSHOT'
-    implementation 'io.micronaut.jms:micronaut-micronaut-jms-core:1.0.0.BUILD-SNAPSHOT'
+    implementation 'io.micronaut.jms:micronaut-jms-activemq:1.0.0.BUILD-SNAPSHOT'
+    implementation 'io.micronaut.jms:micronaut-jms-core:1.0.0.BUILD-SNAPSHOT'
 
-    testAnnotationProcessor "io.micronaut:micronaut-inject-java:2.0.0.M3"
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java:2.0.0"
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testImplementation "io.micronaut.test:micronaut-test-junit5"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"

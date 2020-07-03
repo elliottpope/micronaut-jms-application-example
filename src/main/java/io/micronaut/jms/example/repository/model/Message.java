@@ -39,4 +39,10 @@ public class Message {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date sent;
+
+    @Column
+    private String thread;
+
+    @Column
+    private Integer depth;
 }
