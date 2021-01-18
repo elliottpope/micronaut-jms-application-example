@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation platform('io.micronaut:micronaut-bom:2.0.0.M3')
+    implementation platform('io.micronaut:micronaut-bom:2.2.3')
 
     // lombok config must come before the Micronaut annotation processor config
     compileOnly 'org.projectlombok:lombok:1.18.12'
@@ -31,18 +31,16 @@ dependencies {
     // needed because otherwise IntelliJ integration broken
     compileOnly "io.micronaut:micronaut-inject-java"
     compile "io.micronaut:micronaut-inject"
-    implementation "io.swagger.core.v3:swagger-annotations"
+    implementation "io.swagger.core.v3:swagger-annotations:2.1.6"
     implementation "io.micronaut:micronaut-runtime"
     implementation "javax.jms:javax.jms-api:2.0.1"
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "io.micronaut:micronaut-http-client"
-    implementation "io.micronaut.configuration:micronaut-flyway:2.0.0.RC1"
+    implementation "io.micronaut.flyway:micronaut-flyway:3.3.0"
 
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
 
-
-    implementation 'io.micronaut.jms:micronaut-micronaut-jms-activemq:1.0.0.BUILD-SNAPSHOT'
-    implementation 'io.micronaut.jms:micronaut-micronaut-jms-core:1.0.0.BUILD-SNAPSHOT'
+    implementation 'io.micronaut.jms:micronaut-jms-activemq-classic:1.0.0.BUILD-SNAPSHOT'
 
     testAnnotationProcessor "io.micronaut:micronaut-inject-java:2.0.0.M3"
     testImplementation "org.junit.jupiter:junit-jupiter-api"

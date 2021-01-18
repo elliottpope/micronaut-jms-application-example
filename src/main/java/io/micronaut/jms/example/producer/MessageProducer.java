@@ -22,13 +22,17 @@ public class MessageProducer {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageProducer.class);
 
     @Inject
-    @Named("activeMqConnectionFactory")
-    private JMSConnectionPool connectionPool;
+    public MessageProducer(@Named("activeMqConnectionFactory") JMSConnectionPool connectionPool,
+                           @Value("${example.jms.destination}") String destination) {
+        this.connectionPool = connectionPool;
+        this.destination = destination;
+        this.producer = new JmsProducer(JMSDestinationType.QUEUE, connectionPool);
+    }
 
-    @Value("${example.jms.destination}")
-    private String destination;
 
-    private final JmsProducer producer = new JmsProducer(JMSDestinationType.QUEUE);
+    private final JMSConnectionPool connectionPool;
+    private final String destination;
+    private final JmsProducer producer;
 
     public <T> void send(UUID id, T message) {
         LOGGER.info("Sent message {} of type {} to queue {} with id {}",
@@ -44,7 +48,5 @@ public class MessageProducer {
 
     @PostConstruct
     public void initialize() {
-        producer.setConnectionPool(connectionPool);
-        producer.setSerializer(new DefaultSerializerDeserializer());
     }
 }

@@ -1,11 +1,11 @@
 package io.micronaut.jms.example.listener;
 
-import io.micronaut.jms.annotations.Header;
 import io.micronaut.jms.annotations.JMSListener;
 import io.micronaut.jms.annotations.Queue;
 import io.micronaut.jms.example.repository.MessageRepository;
 import io.micronaut.jms.example.repository.model.Message;
-import io.micronaut.jms.model.JMSHeaders;
+import io.micronaut.messaging.annotation.Body;
+import io.micronaut.messaging.annotation.Header;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -16,9 +16,10 @@ public class MessageListener {
     @Inject
     private MessageRepository repository;
 
-    @Queue(destination = "${example.jms.destination}")
+    @Queue(value = "${example.jms.destination}",
+            concurrency = "1-1")
     public void receive(
-            String message,
+            @Body String message,
             @Header("X-Message-ID") String messageID) {
         System.err.printf(
                 "Received message with ID %s and content %s.\n",
