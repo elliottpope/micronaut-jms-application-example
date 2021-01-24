@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+FROM openjdk:14-alpine
 
 RUN apk add git bash
 
