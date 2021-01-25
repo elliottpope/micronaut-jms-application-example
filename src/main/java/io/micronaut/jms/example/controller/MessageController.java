@@ -7,6 +7,7 @@ import io.micronaut.jms.example.model.ObjectMessage;
 import io.micronaut.jms.example.producer.MessageProducer;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,30 +19,34 @@ public class MessageController {
 
     @Post(value = "/map", produces = MediaType.TEXT_PLAIN, consumes = MediaType.APPLICATION_JSON)
     public String send(Map<String, Object> message) {
-        UUID id = UUID.randomUUID();
+        String id = getId();
         producer.send(id, message);
-        return id.toString();
+        return id;
     }
 
     @Post(value = "/string", produces = MediaType.TEXT_PLAIN, consumes = MediaType.APPLICATION_JSON)
     public String send(String message) {
-        UUID id = UUID.randomUUID();
+        String id = getId();
         producer.send(id, message);
-        return id.toString();
+        return id;
     }
 
     @Post(value = "/object", produces = MediaType.TEXT_PLAIN, consumes = MediaType.APPLICATION_JSON)
     public String send(ObjectMessage message) {
-        UUID id = UUID.randomUUID();
+        String id = getId();
         producer.send(id, message);
-        return id.toString();
+        return id;
     }
 
     @Post(value = "/bytes", produces = MediaType.TEXT_PLAIN)
     public String send() {
-        UUID id = UUID.randomUUID();
-        byte[] message = id.toString().getBytes();
+        String id = getId();
+        byte[] message = id.getBytes();
         producer.send(id, message);
-        return id.toString();
+        return id;
+    }
+
+    private String getId() {
+        return UUID.randomUUID().toString();
     }
 }

@@ -1,52 +1,31 @@
 package io.micronaut.jms.example.producer;
 
-import io.micronaut.context.annotation.Value;
-import io.micronaut.jms.model.JMSDestinationType;
-import io.micronaut.jms.model.JMSHeaders;
-import io.micronaut.jms.model.MessageHeader;
-import io.micronaut.jms.pool.JMSConnectionPool;
-import io.micronaut.jms.serdes.DefaultSerializerDeserializer;
-import io.micronaut.jms.templates.JmsProducer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.micronaut.jms.annotations.JMSProducer;
+import io.micronaut.jms.annotations.Queue;
+import io.micronaut.messaging.annotation.Body;
+import io.micronaut.messaging.annotation.Header;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.util.UUID;
+import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
-@Singleton
-public class MessageProducer {
+import static io.micronaut.jms.activemq.classic.configuration.ActiveMqClassicConfiguration.CONNECTION_FACTORY_BEAN_NAME;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MessageProducer.class);
+@JMSProducer(CONNECTION_FACTORY_BEAN_NAME)
+public interface MessageProducer {
 
-    @Inject
-    public MessageProducer(@Named("activeMqConnectionFactory") JMSConnectionPool connectionPool,
-                           @Value("${example.jms.destination}") String destination) {
-        this.connectionPool = connectionPool;
-        this.destination = destination;
-        this.producer = new JmsProducer(JMSDestinationType.QUEUE, connectionPool);
+    default <T> void send(@NotNull @Header("X-Message-ID") String uuid, @Body T message) {
+        send(uuid, LocalDateTime.now().toString(), message);
     }
 
+    @Queue(value = "${example.jms.destination}")
+    <T> void send(@NotNull @Header("X-Message-ID") String uuid, @NotNull @Header("X-Sent") String sent, @Body T message);
 
-    private final JMSConnectionPool connectionPool;
-    private final String destination;
-    private final JmsProducer producer;
-
-    public <T> void send(UUID id, T message) {
-        LOGGER.info("Sent message {} of type {} to queue {} with id {}",
-                message,
-                message.getClass(),
-                destination,
-                id);
-        producer.send(
-                destination,
-                message,
-                new MessageHeader("X-Message-ID", id.toString()));
-    }
-
-    @PostConstruct
-    public void initialize() {
-    }
+    @Queue(value = "${example.jms.destination}")
+    <T> void sendWithParent(
+            @NotNull @Header("X-Message-ID") String uuid,
+            @Nullable @Header("X-Parent-Message-ID") String parentId,
+            @Nullable @Header("X-Current-Depth") Integer currentDepth,
+            @Nullable @Header("X-Max-Depth") Integer maxDepth,
+            @Body T message);
 }
