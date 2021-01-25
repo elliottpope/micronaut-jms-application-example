@@ -5,12 +5,18 @@ test platform for changes made to the Micronaut JMS project
 
 ## How to use
 
-First clone the repository
+### Prerequisites
+
+1. A copy of the source code (via git clone)
+2. Docker and docker-compose
 
 Then run 
 ```bash
-./gradlew run
+./gradlew build && docker-compose up
 ```
+
+(this command will build the JAR and start the PostgreSQL database and ActiveMQ broker
+with the required configuration)
 
 then
 
