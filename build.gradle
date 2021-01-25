@@ -4,6 +4,11 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
+compileJava {
+    sourceCompatibility = 14
+    targetCompatibility = 14
+}
+
 version '1.0.0.BUILD-SNAPSHOT'
 
 repositories {
@@ -38,7 +43,7 @@ dependencies {
     implementation "io.micronaut:micronaut-http-client"
     implementation "io.micronaut.flyway:micronaut-flyway:3.3.0"
 
-    compile 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
 
     implementation 'io.micronaut.jms:micronaut-jms-activemq-classic:1.0.0.M1'
 
