@@ -1,7 +1,7 @@
 version: '3'
 services:
   application:
-    build: .
+    image: 'ellpope/micronaut-jms-application'
     ports:
     - '8080:8080'
     depends_on:
