@@ -14,6 +14,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Get Version
+        id: get_version
+        run: |
+          chmod +x gradlew
+          VERSION="$(./gradlew properties -q | grep "version:" | awk '{print $2}').$(date +%s)"
+          echo "Building for version ${VERSION} ..."
+          echo "::set-output name=version::${VERSION}"
       - name: Build and Push Image
         id: docker_build
         uses: docker/build-push-action@v2
@@ -21,6 +28,6 @@ jobs:
           push: true
           tags: |
             ellpope/micronaut-jms-application:latest
-            ellpope/micronaut-jms-application:$(date +%s)
+            ellpope/micronaut-jms-application:${{ steps.get_version.outputs.version }}
       - name: Get Image Digest
         run: echo ${{ steps.docker_build.outputs.digest }}
