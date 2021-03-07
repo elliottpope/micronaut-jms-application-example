@@ -44,6 +44,7 @@ public class MessageListener {
                 sent);
 
         Message messageToSave = new Message();
+        messageToSave.setParentID(parentID);
         messageToSave.setMessageID(messageID);
         messageToSave.setParentID(parentMessageID);
         messageToSave.setReceived(new Date());
